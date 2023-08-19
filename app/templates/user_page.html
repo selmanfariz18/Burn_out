@@ -41,22 +41,22 @@
 <!--pomodora div ends-->
 
 <!--Todo div-->
-<div class="card0">
-    <h2>Todo List</h2>
-    <form action="/todo_list" method="POST">
-        {% csrf_token%}
-        {{ form.as_p }}
-        <button type="submit">Add Todo</button>
-    </form>
-    <ul class="todo-list">
-        {% for todo in todos %}
-            <li>
-                <input type="checkbox" {% if todo.completed %}checked{% endif %}>
-                {{ todo.title }}
-            </li>
-        {% endfor %}
-    </ul>
-</div>
+    <div class="card0">
+        <h2>Todo List</h2>
+        <form action="/todo_list" method="POST">
+            {% csrf_token%}
+            {{ form.as_p }}
+            <button type="submit">Add Todo</button>
+        </form>
+        <ul class="todo-list">
+            {% for todo in todos %}
+                <li>
+                    <input type="checkbox" {% if todo.completed %}checked{% endif %}>
+                    {{ todo.title }}
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
 <!--todo div ends-->
 
 

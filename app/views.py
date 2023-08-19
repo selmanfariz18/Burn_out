@@ -81,7 +81,7 @@ def user_page(request):
 
     return render(request, 'user_page.html', context)
 
-#pomodora strating 
+#pomodora starting 
 @login_required
 def start_pomodoro(request):
     if request.method == 'POST':
@@ -104,6 +104,8 @@ def stop_pomodoro(request):
             return JsonResponse({'error': 'Session not found'})
     return JsonResponse({'error': 'Invalid request'})
 
+#todo_list function start
+@login_required
 def todo_list(request):
     if request.user.is_authenticated:
         todos = TodoItem.objects.filter(user=request.user)
@@ -124,3 +126,4 @@ def todo_list(request):
         return HttpResponseRedirect(reverse("user_page"))
     else:
         return redirect('login')
+#todo_list function ends
