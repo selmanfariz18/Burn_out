@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Pomodoro User Page</title>
+    {% csrf_token %}
+    <!-- Include your CSS and JavaScript libraries here -->
+</head>
+<body style="background-color: #4CAF50">
+    <h1 style="text-align: right">Welcome, {{ user.username }}!</h1>
+    
+
+<!--Div for pomodora-->
+    <div style="    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    text-align: center;
+    max-width: 300px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;">
+        <h2>Pomodoro Clock</h2>
+        <button id="start-btn" >Start Pomodoro</button>
+        <br>
+        <button id="stop-btn">Stop Pomodoro</button>
+        <p>Status: <span id="status">Not started</span></p>
+        <p>Focus time: <span id="time-remaining">25:00</span></p>
+    </div>
+    <div><a href='/logout' style="position: fixed; bottom: 0; width: 100%; height: 60px; text-align: right;">
+            <button class="GFG" style="margin-right: 30px;">
+                logout
+            </button>
+        </a>
+    </div>
+<!--pomodora div ends-->
+
+<!--Todo div-->
+
+<!--todo div ends-->
+
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const startBtn = document.getElementById('start-btn');
+            const stopBtn = document.getElementById('stop-btn');
+            const statusSpan = document.getElementById('status');
+            const timeRemainingSpan = document.getElementById('time-remaining');
+            let sessionID = null;
+            let countdownInterval;
+
+            function startCountdown(timeInSeconds) {
+                let remainingTime = timeInSeconds;
+                countdownInterval = setInterval(() => {
+                    const minutes = Math.floor(remainingTime / 60);
+                    const seconds = remainingTime % 60;
+                    timeRemainingSpan.textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+
+                    if (remainingTime === 0) {
+                        clearInterval(countdownInterval);
+                        if (timeInSeconds === 1500) { // If work interval completed (25 minutes)
+                            statusSpan.textContent = 'Rest';
+                            alert('Work interval completed! Take a 5-minute break.');
+                            startCountdown(300); // Start 5-minute rest interval
+                        } else { // If rest interval completed (5 minutes)
+                            statusSpan.textContent = 'Active';
+                            alert('Break time is over. Start your work interval.');
+                            startCountdown(1500); // Start new 25-minute work interval
+                        }
+                    }
+
+                    remainingTime--;
+                }, 1000);
+            }
+
+            startBtn.addEventListener('click', async () => {
+                const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+                const response = await fetch('/start_pomodoro/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                        'X-CSRFToken': csrfToken
+                    }
+                });
+                const data = await response.json();
+                sessionID = data.session_id;
+                statusSpan.textContent = 'Active';
+                startCountdown(1500); // Start 25-minute work interval
+            });
+
+            stopBtn.addEventListener('click', async () => {
+                if (sessionID) {
+                    clearInterval(countdownInterval);
+                    const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+                    const response = await fetch('/stop_pomodoro/', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/x-www-form-urlencoded',
+                            'X-CSRFToken': csrfToken
+                        },
+                        body: `session_id=${sessionID}`
+                    });
+                    const data = await response.json();
+                    timeRemainingSpan.textContent = '25:00';
+                    statusSpan.textContent = 'Not started';
+                }
+            });
+        });
+    </script>
+</body>
+</html>

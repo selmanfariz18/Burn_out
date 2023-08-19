@@ -22,5 +22,5 @@ from app.urls import *
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', include('app.urls')),
+    path('', include('app.urls')),#url connected to app
 ]

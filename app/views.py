@@ -6,12 +6,16 @@ from django.urls import reverse
 from django.contrib import messages
 from django.contrib.auth.models import User
 from django.shortcuts import render, redirect
+from django.http import JsonResponse
+from django.contrib.auth.decorators import login_required
+from datetime import datetime
+from .models import PomodoroSession
 
 # Create your views here.
 
 
 
-
+#sign up form reciever
 def register(request):
     if request.method == 'POST':
         # Get form data
@@ -35,6 +39,8 @@ def register(request):
                 return render(request,'signin.html')
     return render(request,'register.html')
 
+
+#signin form reciever
 def signin(request):
     if request.method == 'POST':
         username=request.POST.get("username")
@@ -42,13 +48,15 @@ def signin(request):
         user=authenticate(request=request,username=username,password=password)
         if user is not None:
             login(request=request,user=user)
-            return HttpResponseRedirect(reverse("home"))
+            return HttpResponseRedirect(reverse("user_page"))
         else:
             messages.error(request,"Error in login")
             return HttpResponseRedirect(reverse("signin"))
     else:
         return render(request, 'signin.html')
-    
+
+
+#logout function
 def logout_user(request):
     logout(request)
     messages.success(request,"Logout Successfull!")
@@ -56,7 +64,31 @@ def logout_user(request):
     #print(verification_code)
     return HttpResponseRedirect(reverse("signin"))
 
+#user home page renders from here
+@login_required
+def user_page(request):
+    user_sessions = PomodoroSession.objects.filter(user=request.user)
+    return render(request, 'user_page.html', {'user_sessions': user_sessions})
 
+#pomodora strating 
+@login_required
+def start_pomodoro(request):
+    if request.method == 'POST':
+        session = PomodoroSession.objects.create(user=request.user, start_time=datetime.now(), is_active=True)
+        return JsonResponse({'session_id': session.id})
+    return JsonResponse({'error': 'Invalid request'})
 
-def home(request):
-    return render(request,'base.html')
+#pomodora stoping
+@login_required
+def stop_pomodoro(request):
+    if request.method == 'POST':
+        session_id = request.POST.get('session_id')
+        try:
+            session = PomodoroSession.objects.get(id=session_id)
+            session.end_time = datetime.now()
+            session.is_active = False
+            session.save()
+            return JsonResponse({'message': 'Pomodoro session stopped successfully'})
+        except PomodoroSession.DoesNotExist:
+            return JsonResponse({'error': 'Session not found'})
+    return JsonResponse({'error': 'Invalid request'})
