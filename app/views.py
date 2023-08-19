@@ -10,6 +10,8 @@ from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
 from datetime import datetime
 from .models import PomodoroSession
+from .forms import TodoForm
+from .models import TodoItem
 
 # Create your views here.
 
@@ -68,7 +70,16 @@ def logout_user(request):
 @login_required
 def user_page(request):
     user_sessions = PomodoroSession.objects.filter(user=request.user)
-    return render(request, 'user_page.html', {'user_sessions': user_sessions})
+    todos = TodoItem.objects.filter(user=request.user)
+    form = TodoForm()
+
+    context = {
+        'todos': todos,
+        'form': form,
+        'user_sessions': user_sessions
+    }
+
+    return render(request, 'user_page.html', context)
 
 #pomodora strating 
 @login_required
@@ -92,3 +103,24 @@ def stop_pomodoro(request):
         except PomodoroSession.DoesNotExist:
             return JsonResponse({'error': 'Session not found'})
     return JsonResponse({'error': 'Invalid request'})
+
+def todo_list(request):
+    if request.user.is_authenticated:
+        todos = TodoItem.objects.filter(user=request.user)
+        form = TodoForm()
+
+        if request.method == 'POST':
+            form = TodoForm(request.POST)
+            if form.is_valid():
+                todo = form.save(commit=False)
+                todo.user = request.user
+                todo.save()
+                return redirect('todo_list')
+
+        context = {
+            'todos': todos,
+            'form': form
+        }
+        return HttpResponseRedirect(reverse("user_page"))
+    else:
+        return redirect('login')

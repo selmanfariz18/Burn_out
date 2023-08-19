@@ -10,4 +10,5 @@ urlpatterns = [
     path('user_page/', views.user_page, name='user_page'),  #basic userpage
     path('start_pomodoro/', views.start_pomodoro, name='start_pomodoro'),
     path('stop_pomodoro/', views.stop_pomodoro, name='stop_pomodoro'),
+    path('todo_list',views.todo_list, name='todo_list')
 ]

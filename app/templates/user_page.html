@@ -5,12 +5,9 @@
     {% csrf_token %}
     <!-- Include your CSS and JavaScript libraries here -->
 </head>
-<body style="background-color: #4CAF50">
-    <h1 style="text-align: right">Welcome, {{ user.username }}!</h1>
-    
-
-<!--Div for pomodora-->
-    <div style="    background-color: #ffffff;
+<style>
+    .card0{
+        background-color: #ffffff;
     border-radius: 10px;
     box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
     padding: 20px;
@@ -19,7 +16,15 @@
     margin: 0 auto;
     display: flex;
     flex-direction: column;
-    align-items: center;">
+    align-items: center;
+    }
+</style>
+<body style="background-color: #4CAF50;" >
+    <h1 style="text-align: right">Welcome, {{ user.username }}!</h1>
+    
+
+<!--Div for pomodora-->
+    <div class="card0">
         <h2>Pomodoro Clock</h2>
         <button id="start-btn" >Start Pomodoro</button>
         <br>
@@ -36,7 +41,22 @@
 <!--pomodora div ends-->
 
 <!--Todo div-->
-
+<div class="card0">
+    <h2>Todo List</h2>
+    <form action="/todo_list" method="POST">
+        {% csrf_token%}
+        {{ form.as_p }}
+        <button type="submit">Add Todo</button>
+    </form>
+    <ul class="todo-list">
+        {% for todo in todos %}
+            <li>
+                <input type="checkbox" {% if todo.completed %}checked{% endif %}>
+                {{ todo.title }}
+            </li>
+        {% endfor %}
+    </ul>
+</div>
 <!--todo div ends-->
 
 
