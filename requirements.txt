@@ -21,3 +21,4 @@ typing_extensions==4.7.1
 urllib3==2.0.4
 whitenoise==6.5.0
 yarl==1.9.2
+django_blog=0.1.1
