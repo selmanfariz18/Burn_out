@@ -232,7 +232,7 @@
         <img src="https://img.freepik.com/free-icon/user_318-875902.jpg?t=st=1692497883~exp=1692498483~hmac=aa343ee4e0f0ede050e9a4eee96089326be09f86b86329b325a71c6e4f53b9d2" alt="Profile Picture" />
         <span>{{ user.username }}</span>
       </div>
-      <a href="/logout" class="login-btn">Logout</a>
+      <a href="/logout" class="login-btn" style="text-decoration: none;">Logout</a>
     </div>
     <div class="mainbox">
       <div class="box1">
@@ -295,34 +295,62 @@
         </div>
       </div>
       <div class="box2">
-        <div class="head" >
-          <div
-            class="mindbox"
-            style="display: flex; justify-content: space-between; margin: 20px"
-          >
-            <div
-              class="flex-head"
-              style="
-                flex-direction: column;
-                margin: 30px;
-                font-weight: 900;
-                font-size: 20px;
-              "
-            >
-              DASHBOARD
+        <div class="head">
+          <div class="mindbox" style="display: flex; justify-content: space-between; margin: 20px">
+            <div class="flex-head" style="flex-direction: column; margin: 30px; font-weight: 900; font-size: 20px;">
+              Game
             </div>
             <div style="flex-direction: column; margin: 30px">
               <i class="fa fa-toggle-on" aria-hidden="true"></i>
             </div>
           </div>
         </div>
-
-        <div class="musicbox">
-          
-        </div>
+      
+        <div class="musicbox" >
+            
+            <div class="top-music" style=" display: flex; height:100px; align-items: center;justify-content: space-evenly; margin-top: 30px;">
+                <div class="top-left-music" style="background-color: rgb(112, 179, 179); flex-direction: column; width: 100px; height:70px ; border-radius: 0.625rem;
+                background: #FFB8B8;">
+                
+                </div>
+                <div class="top-right-music" style="flex-direction: column; color: #000;
+                font-family: Poppins;
+                font-size: 1.3125rem;
+                font-style: normal;
+                font-weight: 400;
+                line-height: normal;">
+                  Bineural Beats<br><span style=" font-size: 15px; color: #7A7A7A;
+                  font-family: Poppins;
+                  font-size: 0.825rem;
+                  font-style: normal;
+                  font-weight: 400;
+                  line-height: normal;">Traveller</span>
+  
+                </div>
+            </div>
+            <div class="bottom-music" style="display: flex; justify-content: space-evenly;" >
+              <div class="t1" style=" flex-direction: column;">
+                <a href="#" style="color:black"><i class="fa fa-backward" aria-hidden="true"></i></a>
+              </div>
+              <div class="t2" style="flex-direction: column;">
+                <a href="/pause" style="color:black"><i class="fa fa-pause" aria-hidden="true"></i></a>
+              </div>
+              <div class="t2" style="flex-direction: column;">
+                <a href="/play" style="color:black"><i class="fa fa-play" aria-hidden="true"></i></a>
+              </div>
+              <div class="t3" style=" flex-direction: column;">
+                <a href="#" style="color:black"><i class="fa fa-forward" aria-hidden="true"></i></a>  
+              </div>
+       
+      
+            </div>
+          </div>
       </div>
+      
     </div>
     <script>
+
+        /*script for pomodoro*/
         document.addEventListener('DOMContentLoaded', () => {
             const startBtn = document.getElementById('start-btn');
             const stopBtn = document.getElementById('stop-btn');
@@ -388,6 +416,12 @@
                 }
             });
         });
+        /*pomodoro script ends */
+
+        /* script for spotify */
+ 
+        //script for spotify ends
+
     </script>
   </body>
 </html>

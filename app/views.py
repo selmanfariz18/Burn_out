@@ -12,10 +12,17 @@ from datetime import datetime
 from .models import PomodoroSession
 from .forms import TodoForm
 from .models import TodoItem
+from .spotify_auth import get_spotify_auth
+from spotipy import Spotify
+from spotipy.oauth2 import SpotifyOAuth
+from django.conf import settings
+
 
 # Create your views here.
 
-
+#home view
+def home(request):
+    return render(request,'home.html')
 
 #sign up form reciever
 def register(request):
@@ -127,3 +134,61 @@ def todo_list(request):
     else:
         return redirect('login')
 #todo_list function ends
+
+
+#spotify funtions
+
+
+def spotify_auth(request):
+    sp_oauth = SpotifyOAuth(
+        settings.SPOTIPY_CLIENT_ID,
+        settings.SPOTIPY_CLIENT_SECRET,
+        settings.SPOTIPY_REDIRECT_URI,
+        scope='user-read-playback-state user-modify-playback-state',
+    )
+    auth_url = sp_oauth.get_authorize_url()
+    return redirect(auth_url)
+
+def spotify_callback(request):
+    sp_oauth = SpotifyOAuth(
+        settings.SPOTIPY_CLIENT_ID,
+        settings.SPOTIPY_CLIENT_SECRET,
+        settings.SPOTIPY_REDIRECT_URI,
+    )
+    token_info = sp_oauth.get_access_token(request.GET.get('code'))
+    
+    # Store token_info in the user's session or database
+    request.session['token_info'] = token_info
+    
+    return HttpResponse("Authentication successful! You can now control the Spotify player.")
+
+def get_spotify_instance(request):
+    token_info = request.session.get('token_info')
+    if token_info:
+        access_token = token_info.get('access_token')
+        if access_token:
+            sp = Spotify(auth=access_token)
+            return sp
+    return None
+
+def play_track(request):
+    sp = get_spotify_instance(request)
+    if sp:
+        track_uri = 'spotify:track:TRACK_ID'
+        sp.start_playback(uris=[track_uri])
+        return HttpResponse("Playing a track!")
+    else:
+        return HttpResponse("Not authenticated")
+
+def pause_track(request):
+    sp = get_spotify_instance(request)
+    if sp:
+        sp.pause_playback()
+        return HttpResponse("Paused the track!")
+    else:
+        return HttpResponse("Not authenticated")
+
+def spotify_player(request):
+    return render(request, 'spotify_player.html')
+
+#spotify functions ends
