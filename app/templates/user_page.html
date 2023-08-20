@@ -263,7 +263,7 @@
               Lets get things done the pomodoro way
             </div>
             <p style="margin-left: 30px">Status: <span id="status">Not started</span></p>
-            <p style="text-align: center; font-size: 50px;"><span id="time-remaining">25:00</span></p>
+            <p style="text-align: center; font-size: 50px;"><span id="time-remaining">60:00</span></p>
             <button class="btn" id="start-btn">Start</button>
             <br>
             <button id="stop-btn">Stop</button>
@@ -274,7 +274,8 @@
           <div class="currenttask">
             <div class="r1">
               <div class="flwr-txt" style="font-weight: 900; text-align: center; margin-top: 10px;">
-                CURRENT TASK
+                <a href="#" style="text-decoration: none; color: black">Feeling low?
+                Talk to an export</a>
               </div>
               <div class="bttm">
                 
@@ -306,6 +307,8 @@
           </div>
         </div>
       
+
+        <!--spotify div-->
         <div class="musicbox" >
             
             <div class="top-music" style=" display: flex; height:100px; align-items: center;justify-content: space-evenly; margin-top: 30px;">
@@ -330,16 +333,16 @@
             </div>
             <div class="bottom-music" style="display: flex; justify-content: space-evenly;" >
               <div class="t1" style=" flex-direction: column;">
-                <a href="#" style="color:black"><i class="fa fa-backward" aria-hidden="true"></i></a>
+                <a href="https://accounts.spotify.com/en/login/?gad=1&gclid=Cj0KCQjw0IGnBhDUARIsAMwFDLn-E-vUHROgq15TfvvoPPM8lNaPrWQlzqfcDHvGcQFIklCdrxUU_CAaAoUHEALw_wcB&gclsrc=aw.ds" style="color:black"><i class="fa fa-backward" aria-hidden="true"></i></a>
               </div>
               <div class="t2" style="flex-direction: column;">
-                <a href="/pause" style="color:black"><i class="fa fa-pause" aria-hidden="true"></i></a>
+                <a href="https://accounts.spotify.com/en/login/?gad=1&gclid=Cj0KCQjw0IGnBhDUARIsAMwFDLn-E-vUHROgq15TfvvoPPM8lNaPrWQlzqfcDHvGcQFIklCdrxUU_CAaAoUHEALw_wcB&gclsrc=aw.ds" style="color:black"><i class="fa fa-pause" aria-hidden="true"></i></a>
               </div>
               <div class="t2" style="flex-direction: column;">
-                <a href="/play" style="color:black"><i class="fa fa-play" aria-hidden="true"></i></a>
+                <a href="https://accounts.spotify.com/en/login/?gad=1&gclid=Cj0KCQjw0IGnBhDUARIsAMwFDLn-E-vUHROgq15TfvvoPPM8lNaPrWQlzqfcDHvGcQFIklCdrxUU_CAaAoUHEALw_wcB&gclsrc=aw.ds" style="color:black"><i class="fa fa-play" aria-hidden="true"></i></a>
               </div>
               <div class="t3" style=" flex-direction: column;">
-                <a href="#" style="color:black"><i class="fa fa-forward" aria-hidden="true"></i></a>  
+                <a href="https://accounts.spotify.com/en/login/?gad=1&gclid=Cj0KCQjw0IGnBhDUARIsAMwFDLn-E-vUHROgq15TfvvoPPM8lNaPrWQlzqfcDHvGcQFIklCdrxUU_CAaAoUHEALw_wcB&gclsrc=aw.ds" style="color:black"><i class="fa fa-forward" aria-hidden="true"></i></a>  
               </div>
        
       
@@ -368,14 +371,14 @@
 
                     if (remainingTime === 0) {
                         clearInterval(countdownInterval);
-                        if (timeInSeconds === 1500) { // If work interval completed (25 minutes)
+                        if (timeInSeconds === 3600) { // If work interval completed (25 minutes)
                             statusSpan.textContent = 'Rest';
                             alert('Work interval completed! Take a 5-minute break.');
-                            startCountdown(300); // Start 5-minute rest interval
+                            startCountdown(600); // Start 5-minute rest interval
                         } else { // If rest interval completed (5 minutes)
                             statusSpan.textContent = 'Active';
                             alert('Break time is over. Start your work interval.');
-                            startCountdown(1500); // Start new 25-minute work interval
+                            startCountdown(3600); // Start new 25-minute work interval
                         }
                     }
 
@@ -395,7 +398,7 @@
                 const data = await response.json();
                 sessionID = data.session_id;
                 statusSpan.textContent = 'Active';
-                startCountdown(1500); // Start 25-minute work interval
+                startCountdown(3600); // Start 25-minute work interval
             });
 
             stopBtn.addEventListener('click', async () => {
@@ -411,7 +414,7 @@
                         body: `session_id=${sessionID}`
                     });
                     const data = await response.json();
-                    timeRemainingSpan.textContent = '25:00';
+                    timeRemainingSpan.textContent = '60:00';
                     statusSpan.textContent = 'Not started';
                 }
             });
