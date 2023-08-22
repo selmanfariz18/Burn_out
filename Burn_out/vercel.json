@@ -1,0 +1,14 @@
+{
+    "builds": [
+      {
+        "src": "Burn_out/wsgi.py",
+        "use": "@vercel/python"
+      }
+    ],
+    "routes": [
+      {
+        "src": "/(.*)",
+        "dest": "Burn_out/wsgi.py"
+      }
+    ]
+}
